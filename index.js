@@ -74,36 +74,6 @@ app.get('/', (req, res) => {
     });
 });
 
-function checkPasswordStrength(password) {
-    let score = 0;
-    let suggestions = [];
-
-    if (password.length >= 8) score++;
-    else suggestions.push("Use at least 8 characters");
-
-    if (/[A-Z]/.test(password)) score++;
-    else suggestions.push("Add an uppercase letter");
-
-    if (/[0-9]/.test(password)) score++;
-    else suggestions.push("Add a number");
-
-    if (/[^A-Za-z0-9]/.test(password)) score++;
-    else suggestions.push("Add a special character");
-
-    let strength = "Weak";
-    if (score >= 4) strength = "Strong";
-    else if (score >= 2) strength = "Medium";
-
-    return { strength, score, suggestions };
-}
-
-app.post("/api/security/passwordcheck", (req, res) => {
-    const { password } = req.body;
-    if (!password) return res.status(400).json({ error: "Password is required" });
-    const result = checkPasswordStrength(password);
-    res.json(result);
-});
-
 app.listen(port, () => {
     console.log(`App is listening on ${port}`);
 });
